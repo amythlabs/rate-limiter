@@ -1,0 +1,13 @@
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,ratelimit
+
+ratelimit:
+  backend: CAFFEINE
+  sliding-buckets: 60
+  include-forwarded-for: true

@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,ratelimit
+
+#ratelimit:
+#  backend: CAFFEINE
+#  sliding-buckets: 60
+#  include-forwarded-for: true
+
+ratelimit:
+  backend: REDIS
+  redis-key-prefix: "demo:ratelimit:"
+  sliding-buckets: 60
+  include-forwarded-for: true
+
+spring:
+  data:
+    redis:
+      url: redis://default:qNSOX6ABFJT29gIVxg0dCGmVkGRSRyfX@redis-17522.crce202.eu-west-3-1.ec2.redns.redis-cloud.com:17522
+      timeout: 30s
