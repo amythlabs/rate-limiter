@@ -105,3 +105,11 @@ Built-in:
 - More flexible key resolvers (path-based, tenant-aware).
 - Advanced policy composition (burst + smoothing).
 
+## 🤝 Contributing
+We love contributions! See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## 📜 Code of Conduct
+Please be respectful and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 📄 License
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
