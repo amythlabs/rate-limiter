@@ -19,7 +19,26 @@ package org.amyth.core.keys;
 import org.amyth.core.api.HttpRequestContext;
 import org.amyth.core.api.KeyResolver;
 
+/**
+ * A KeyResolver implementation that uses the client's IP address as the rate limit key.
+ * Takes into account proxy headers if configured in the underlying implementation.
+ */
 public final class IpKeyResolver implements KeyResolver {
+
+    /**
+     * Default constructor for IpKeyResolver.
+     */
+    public IpKeyResolver() {
+        // Default constructor
+    }
+
+    /**
+     * Resolves the rate limit key using the client's IP address.
+     *
+     * @param ctx the HTTP request context
+     * @return the client's IP address as the rate limit key
+     */
+    @Override
     public String resolve(HttpRequestContext ctx) {
         return ctx.clientIp(); // honor X-Forwarded-For if configured
     }

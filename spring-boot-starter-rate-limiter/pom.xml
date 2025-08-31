@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.github.amythlabs</groupId>
         <artifactId>rate-limiter</artifactId>
-        <version>${revision}</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>spring-boot-starter-rate-limiter</artifactId>
@@ -14,6 +14,36 @@
     <description>This project delivers a flexible, production-ready rate limiting solution for Spring Boot applications. It supports both monolithic setups (with fast in-memory Caffeine integration) and distributed microservice architectures (with Redis support) for both MVC and WebFlux.</description>
     <packaging>jar</packaging>
 
+    <url>https://github.com/amythlabs/rate-limiter</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>amith</id>
+            <name>Amith</name>
+            <url>https://github.com/amythlabs</url>
+            <organization>amythlabs</organization>
+            <organizationUrl>https://github.com/amythlabs</organizationUrl>
+            <roles>
+                <role>lead</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/amythlabs/rate-limiter.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/amythlabs/rate-limiter.git</developerConnection>
+        <url>https://github.com/amythlabs/rate-limiter</url>
+        <tag>HEAD</tag>
+    </scm>
     <dependencies>
         <dependency>
             <groupId>io.github.amythlabs</groupId>
@@ -35,4 +65,9 @@
         <!-- We intentionally DO NOT force web/webflux/actuator/redis here.
              Users choose them; autoconfigure marks them optional. -->
     </dependencies>
+    <build>
+        <plugins>
+
+        </plugins>
+    </build>
 </project>

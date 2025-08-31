@@ -26,15 +26,34 @@ import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * RateLimitStore implementation backed by Caffeine in-memory cache.
+ * <p>
+ * Provides atomic increment and expiration for rate limit buckets.
+ * Suitable for single-node deployments or ephemeral rate limiting.
+ * </p>
+ */
 public class CaffeineRateLimitStore implements RateLimitStore {
     private final Cache<String, AtomicLong> cache;
 
+    /**
+     * Constructs a CaffeineRateLimitStore with the specified maximum cache size.
+     *
+     * @param maxSize the maximum number of entries the cache can hold
+     */
     public CaffeineRateLimitStore(long maxSize) {
         this.cache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
                 .build();
     }
 
+    /**
+     * Constructs a CaffeineRateLimitStore with custom cache size and ticker.
+     * Allows for custom expiration policies via the provided ticker.
+     *
+     * @param maxSize the maximum number of entries the cache can hold
+     * @param ticker  the ticker to use for cache expiration
+     */
     public CaffeineRateLimitStore(long maxSize, Ticker ticker) {
         this.cache = Caffeine.newBuilder()
                 .maximumSize(maxSize)

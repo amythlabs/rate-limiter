@@ -6,14 +6,43 @@
     <parent>
         <groupId>io.github.amythlabs</groupId>
         <artifactId>rate-limiter</artifactId>
-        <version>${revision}</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>rate-limiting-core</artifactId>
     <name>Rate Limiting Core</name>
     <description>Framework-agnostic rate limiting algorithms and store SPI (sliding window etc.); Caffeine/Redis-ready.</description>
     <packaging>jar</packaging>
+    <url>https://github.com/amythlabs/rate-limiter</url>
 
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>amith</id>
+            <name>Amith</name>
+            <url>https://github.com/amythlabs</url>
+            <organization>amythlabs</organization>
+            <organizationUrl>https://github.com/amythlabs</organizationUrl>
+            <roles>
+                <role>lead</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/amythlabs/rate-limiter.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/amythlabs/rate-limiter.git</developerConnection>
+        <url>https://github.com/amythlabs/rate-limiter</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <!-- Caffeine for the in-memory store -->
@@ -52,8 +81,7 @@
 
     <build>
         <plugins>
-            <!-- Inherit compiler settings from parent -->
+
         </plugins>
     </build>
-
 </project>

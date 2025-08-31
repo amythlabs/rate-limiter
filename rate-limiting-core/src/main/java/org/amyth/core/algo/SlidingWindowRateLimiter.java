@@ -25,14 +25,25 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Sliding window implementation of rate limiting.
+ * Divides the time window into multiple buckets for more accurate rate limiting.
+ * Provides smooth rate limiting by considering partial windows rather than
+ * fixed boundaries.
+ */
 public class SlidingWindowRateLimiter implements RateLimiter {
     private final RateLimitStore store;
     private final Clock clock;
-    private final int buckets; // e.g., 60
+    private final int buckets;
 
     /**
-     * @param store   backing store (Caffeine/Redis)
-     * @param clock   time source (use Clock.systemUTC())
+     * Creates a new sliding window rate limiter.
+     * The window is divided into multiple buckets to achieve a smooth
+     * sliding window effect. More buckets provide smoother limiting but
+     * require more storage.
+     *
+     * @param store   backing store (Caffeine/Redis) for storing bucket counters
+     * @param clock   time source (use Clock.systemUTC()) for timestamp generation
      * @param buckets number of sub-buckets per window (e.g., 60 for 1-min bucket size within 1-hour window)
      */
     public SlidingWindowRateLimiter(RateLimitStore store, Clock clock, int buckets) {

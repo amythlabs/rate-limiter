@@ -28,6 +28,12 @@ public final class RateLimitMetricsBinder implements MeterBinder {
     private final AtomicLong allowedTotal = new AtomicLong();
     private final AtomicLong blockedTotal = new AtomicLong();
 
+    /**
+     * Creates a new metrics binder for rate limiting statistics.
+     *
+     * @param backendTag The backend store type tag (redis, caffeine, etc)
+     * @param algoTag The rate limiting algorithm tag
+     */
     public RateLimitMetricsBinder(String backendTag, String algoTag) {
         this.backendTag = backendTag == null ? "unknown" : backendTag;
         this.algoTag = algoTag == null ? "sliding_window" : algoTag;
@@ -49,18 +55,47 @@ public final class RateLimitMetricsBinder implements MeterBinder {
                 .register(registry);
     }
 
+    /**
+     * Increments the counter for allowed requests.
+     */
     public void incrementAllowed() {
         allowedTotal.incrementAndGet();
         if (allowedCounter != null) allowedCounter.increment();
     }
 
+    /**
+     * Increments the counter for blocked requests.
+     */
     public void incrementBlocked() {
         blockedTotal.incrementAndGet();
         if (blockedCounter != null) blockedCounter.increment();
     }
 
+    /**
+     * Gets the total number of allowed requests.
+     *
+     * @return The count of allowed requests
+     */
     public long getAllowedTotal() { return allowedTotal.get(); }
+
+    /**
+     * Gets the total number of blocked requests.
+     *
+     * @return The count of blocked requests
+     */
     public long getBlockedTotal() { return blockedTotal.get(); }
+
+    /**
+     * Gets the backend store type tag.
+     *
+     * @return The backend store identifier
+     */
     public String getBackendTag() { return backendTag; }
+
+    /**
+     * Gets the rate limiting algorithm tag.
+     *
+     * @return The algorithm identifier
+     */
     public String getAlgoTag() { return algoTag; }
 }

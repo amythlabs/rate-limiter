@@ -18,4 +18,11 @@ package org.amyth.core.model;
 
 import java.time.Instant;
 
+/**
+ * Represents the result of a rate limit check.
+ *
+ * @param allowed   whether the request is allowed to proceed
+ * @param remaining the number of remaining permits in the current time window
+ * @param resetAt   the instant when the rate limit window resets
+ */
 public record HitResult(boolean allowed, long remaining, Instant resetAt) {}

@@ -17,4 +17,10 @@ package org.amyth.core.model;
 
 import java.time.Duration;
 
+/**
+ * Defines a rate limiting rule with a maximum number of permits allowed within a time window.
+ *
+ * @param permits the maximum number of requests allowed in the time window
+ * @param window the time duration of the rate limiting window
+ */
 public record LimitRule(long permits, Duration window) {}

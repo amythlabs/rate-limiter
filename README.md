@@ -1,6 +1,7 @@
 # Rate Limiter for Spring Boot
 
 [![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.amythlabs/spring-boot-starter-rate-limiter.svg?label=Maven%20Central)](https://central.sonatype.com/artifact/io.github.amythlabs/spring-boot-starter-rate-limiter)
 
 A **Spring Boot 3.x starter** for HTTP rate limiting — works with both **MVC** and **WebFlux**.  
 Simple annotation-based API, batteries-included with Redis support, metrics, and standard headers.
@@ -38,10 +39,41 @@ Maven:
   <artifactId>spring-boot-starter-rate-limiter</artifactId>
   <version>0.1.0</version>
 </dependency>
+<!-- To expose metrics, add the following dependencies in your application -->
+<!--  Required: spring-boot-starter-actuator -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+<!-- Choose one Micrometer registry depending on your monitoring system -->
+<!-- Example: Prometheus -->
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-prometheus</artifactId>
+</dependency>
+
+<!-- Example: Datadog -->
+<dependency>
+  <groupId>io.micrometer</groupId>
+  <artifactId>micrometer-registry-datadog</artifactId>
+</dependency>
 ```
 Gradle:
 
-```implementation("io.github.amythlabs:spring-boot-starter-rate-limiter:0.1.0")```
+```
+implementation("io.github.amythlabs:spring-boot-starter-rate-limiter:0.1.0")
+ 
+// Required: Spring Boot Actuator for metrics endpoints
+implementation "org.springframework.boot:spring-boot-starter-actuator"
+
+// Choose one Micrometer registry depending on your monitoring system
+// Example: Prometheus
+implementation "io.micrometer:micrometer-registry-prometheus"
+
+// Example: Datadog
+implementation "io.micrometer:micrometer-registry-datadog"
+```
 ### 2. Annotate your endpoints
 ```java
 @RestController
@@ -88,6 +120,8 @@ Built-in:
 @RateLimit(limit = 10, window = 60, key = "#request.getHeader('X-Api-Key')")
 ```
 ## 📊 Observability
+This starter integrates with **Micrometer** and **Spring Boot Actuator** to provide rate limiter observability.
+
 - **Micrometer metrics:**
 
   Example: `rate.limit.hits{algorithm="sliding", backend="redis"}`

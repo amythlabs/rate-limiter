@@ -23,6 +23,12 @@ public final class RedisRateLimitStore implements RateLimitStore {
     private final StringRedisTemplate redis;
     private final String keyPrefix;
 
+    /**
+     * Creates a new RedisRateLimitStore instance.
+     *
+     * @param redis The Redis template to use for storage operations
+     * @param keyPrefix Prefix to apply to all Redis keys (defaults to "rl:" if null or blank)
+     */
     public RedisRateLimitStore(@NonNull StringRedisTemplate redis, String keyPrefix) {
         this.redis = Objects.requireNonNull(redis, "redis");
         this.keyPrefix = (keyPrefix == null || keyPrefix.isBlank()) ? "rl:" : keyPrefix;

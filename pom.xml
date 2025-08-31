@@ -6,7 +6,7 @@
 
     <groupId>io.github.amythlabs</groupId>
     <artifactId>rate-limiter</artifactId>
-    <version>${revision}</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>Rate Limiter (Parent)</name>
     <description>Parent POM for a Spring-friendly rate limiter with MVC and WebFlux support.</description>
@@ -44,8 +44,7 @@
         <module>rate-limiting-core</module>
         <module>rate-limiting-spring-boot-autoconfigure</module>
         <module>spring-boot-starter-rate-limiter</module>
-        <module>samples/demo-mvc</module>
-        <module>samples/demo-webflux</module>
+
     </modules>
 
     <properties>
@@ -87,6 +86,77 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.3.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.2</version>
+                <configuration>
+                    <flattenMode>ossrh</flattenMode>
+                    <updatePomFile>true</updatePomFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals><goal>flatten</goal></goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals><goal>clean</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Attach sources -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Attach javadocs -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.3</version>
+                <configuration>
+                    <!-- Optional but helpful with Java 21 -->
+                    <failOnError>false</failOnError>
+                    <!-- <doclint>none</doclint> -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals><goal>jar</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Sign at verify (AFTER flatten/sources/javadocs) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-release</id>
+                        <phase>verify</phase>
+                        <goals><goal>sign</goal></goals>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg><arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -191,4 +261,44 @@
         </pluginManagement>
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>activate.release</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>rate-limiting-core</module>
+                <module>rate-limiting-spring-boot-autoconfigure</module>
+                <module>spring-boot-starter-rate-limiter</module>
+                <module>samples/demo-mvc</module>
+                <module>samples/demo-webflux</module>
+            </modules>
+            <build>
+                <plugins>
+
+                    <!-- central publishing -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                            <excludeArtifacts>
+                                <exclude>io.github.amythlabs:demo-mvc</exclude>
+                                <exclude>io.github.amythlabs:demo-webflux</exclude>
+                            </excludeArtifacts>
+                        </configuration>
+
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -19,12 +19,23 @@ package org.amyth.core.keys;
 import org.amyth.core.api.HttpRequestContext;
 import org.amyth.core.api.KeyResolver;
 
+/**
+ * A KeyResolver implementation that resolves rate limit keys based on cookie values.
+ * This resolver extracts the value of a specified cookie from the HTTP request
+ * and uses it as the rate limiting key. If the cookie is not present, it returns "nocookie".
+ */
 public final class CookieKeyResolver implements KeyResolver {
     private final String cookieName;
 
+    /**
+     * Constructs a new CookieKeyResolver.
+     *
+     * @param cookieName the name of the cookie to use for rate limit key resolution
+     */
     public CookieKeyResolver(String cookieName) {
         this.cookieName = cookieName;
     }
 
+    @Override
     public String resolve(HttpRequestContext ctx) { return ctx.cookie(cookieName).orElse("nocookie"); }
 }

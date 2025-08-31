@@ -28,12 +28,30 @@ import java.time.Clock;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Auto-configuration for rate limiting functionality.
+ * Provides beans for rate limiting store, limiter, metrics, and web integration.
+ */
 @AutoConfiguration
 @EnableConfigurationProperties(RateLimitProperties.class)
 public class RateLimitingAutoConfiguration {
 
+    /**
+     * Creates a new instance of RateLimitingAutoConfiguration.
+     * Default constructor used by Spring Boot for auto-configuration.
+     */
+    public RateLimitingAutoConfiguration() {
+    }
+
     /* ---------- Store selection (Caffeine | Redis) ---------- */
 
+    /**
+     * Creates a Redis-based rate limit store when Redis is available and configured.
+     *
+     * @param props Properties containing Redis configuration
+     * @param redisTemplateProvider Provider for Redis template
+     * @return A Redis-based rate limit store
+     */
     @Bean
     @ConditionalOnMissingBean(RateLimitStore.class)
     @ConditionalOnClass(StringRedisTemplate.class)
@@ -53,6 +71,12 @@ public class RateLimitingAutoConfiguration {
         return null;
     }
 
+    /**
+     * Creates a Caffeine-based rate limit store as the default implementation.
+     *
+     * @param props Properties containing Caffeine configuration
+     * @return A Caffeine-based rate limit store
+     */
     @Bean
     @ConditionalOnMissingBean(RateLimitStore.class)
     public RateLimitStore caffeineRateLimitStore(RateLimitProperties props) {
@@ -61,6 +85,13 @@ public class RateLimitingAutoConfiguration {
 
     /* ---------- Limiter (Sliding Window) ---------- */
 
+    /**
+     * Creates the rate limiter using the configured store.
+     *
+     * @param store The rate limit store to use
+     * @param props Configuration properties
+     * @return A sliding window rate limiter instance
+     */
     @Bean
     @ConditionalOnMissingBean(RateLimiter.class)
     public RateLimiter rateLimiter(RateLimitStore store, RateLimitProperties props) {
@@ -69,6 +100,12 @@ public class RateLimitingAutoConfiguration {
 
     /* ---------- Metrics binder (uses tags, not RateLimiter) ---------- */
 
+    /**
+     * Creates a metrics binder for collecting rate limiting statistics.
+     *
+     * @param props Configuration properties
+     * @return A metrics binder instance
+     */
     @Bean
     @ConditionalOnMissingBean(RateLimitMetricsBinder.class)
     public RateLimitMetricsBinder rateLimitMetricsBinder(RateLimitProperties props) {
@@ -131,6 +168,13 @@ public class RateLimitingAutoConfiguration {
 
     /* ---------- Actuator endpoint ---------- */
 
+    /**
+     * Creates the rate limit actuator endpoint when actuator is available.
+     *
+     * @param limiter The rate limiter instance
+     * @param metrics The metrics binder
+     * @return A rate limit endpoint instance
+     */
     @Bean
     @ConditionalOnAvailableEndpoint(endpoint = RateLimitEndpoint.class)
     public RateLimitEndpoint rateLimitEndpoint(

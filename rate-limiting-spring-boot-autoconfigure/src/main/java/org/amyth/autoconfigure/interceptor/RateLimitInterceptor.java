@@ -33,6 +33,13 @@ public final class RateLimitInterceptor implements HandlerInterceptor {
     private final RateLimitMetricsBinder metrics;
     private final ExpressionParser spel = new SpelExpressionParser();
 
+    /**
+     * Creates a new rate limit interceptor.
+     *
+     * @param limiter The rate limiter implementation to use
+     * @param props Configuration properties for rate limiting
+     * @param metrics Metrics binder for collecting statistics
+     */
     public RateLimitInterceptor(RateLimiter limiter, RateLimitProperties props, RateLimitMetricsBinder metrics) {
         this.limiter = limiter;
         this.props = props;

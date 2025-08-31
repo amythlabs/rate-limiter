@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
@@ -41,6 +40,14 @@ public final class RateLimitWebFilter implements WebFilter {
     private final Map<String, RateLimit> registry;
     private final ExpressionParser spel = new SpelExpressionParser();
 
+    /**
+     * Creates a new RateLimitWebFilter instance.
+     *
+     * @param limiter The rate limiter implementation to use
+     * @param props Configuration properties for rate limiting
+     * @param metrics Metrics binder for collecting statistics
+     * @param registry Registry mapping of paths to rate limit annotations
+     */
     public RateLimitWebFilter(RateLimiter limiter, RateLimitProperties props, RateLimitMetricsBinder metrics, Map<String, RateLimit> registry) {
         this.limiter = limiter;
         this.props = props;

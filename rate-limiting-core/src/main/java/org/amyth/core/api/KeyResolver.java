@@ -16,6 +16,17 @@
 
 package org.amyth.core.api;
 
+/**
+ * Interface for resolving rate limit keys from HTTP requests.
+ * Implementations can extract keys based on different request attributes
+ * such as IP address, headers, cookies, or request parameters.
+ */
 public interface KeyResolver {
+    /**
+     * Resolves the rate limit key from the given HTTP request context.
+     *
+     * @param ctx the HTTP request context containing request information
+     * @return a string key that will be used for rate limiting
+     */
     String resolve(HttpRequestContext ctx); // your own minimal ctx abstraction
 }

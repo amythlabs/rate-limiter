@@ -20,11 +20,23 @@ public final class RateLimitEndpoint {
     private final RateLimiter limiter;
     private final RateLimitMetricsBinder metrics;
 
+    /**
+     * Creates a new RateLimitEndpoint instance.
+     *
+     * @param limiter The rate limiter instance to expose metrics for
+     * @param metrics The metrics binder to collect rate limiting statistics
+     */
     public RateLimitEndpoint(RateLimiter limiter, RateLimitMetricsBinder metrics) {
         this.limiter = limiter;
         this.metrics = metrics;
     }
 
+    /**
+     * Returns current rate limiting metrics and statistics.
+     *
+     * @return A map containing rate limit metrics including timestamp, backend type,
+     *         algorithm, and request counts
+     */
     @ReadOperation
     public Map<String, Object> info() {
         Map<String, Object> out = new HashMap<>();
@@ -33,7 +45,6 @@ public final class RateLimitEndpoint {
         out.put("algo", metrics.getAlgoTag());
         out.put("allowedTotal", metrics.getAllowedTotal());
         out.put("blockedTotal", metrics.getBlockedTotal());
-        // You can add more fields (e.g., configured defaults) if you expose them via properties.
         return out;
     }
 }

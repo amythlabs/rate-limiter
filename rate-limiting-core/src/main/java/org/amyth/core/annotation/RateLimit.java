@@ -28,27 +28,33 @@ import java.util.concurrent.TimeUnit;
  * Supports various keying strategies (IP, user, header, cookie, custom) and flexible configuration.
  * </p>
  * <h2>Usage Examples</h2>
- * <pre>
- * // Limit to 5 requests per hour per user
+ * <pre>{@code
+ * // Example 1: Limit to 5 requests per hour per user
  * @RateLimit(permits = 5, window = 1, unit = TimeUnit.HOURS, key = "#userId", strategy = KeyStrategy.USER)
  * public void getProfile() { ... }
  *
- * // Limit to 100 requests per minute per IP
+ * // Example 2: Limit to 100 requests per minute per IP
  * @RateLimit(permits = 100, window = 1, unit = TimeUnit.MINUTES)
  * public void getData() { ... }
  *
- * // Limit to 10 requests per day using a custom header
- * @RateLimit(permits = 10, window = 1, unit = TimeUnit.DAYS, strategy = KeyStrategy.HEADER, strategyArg = "X-Api-Key", key = "#request.getHeader('X-Api-Key')")
+ * // Example 3: Limit to 10 requests per day using a custom header
+ * @RateLimit(permits = 10, window = 1, unit = TimeUnit.DAYS,
+ *           strategy = KeyStrategy.HEADER,
+ *           strategyArg = "X-Api-Key",
+ *           key = "#request.getHeader('X-Api-Key')")
  * public void getReport() { ... }
  *
- * // Limit to 20 requests per 10 seconds, using a cookie value
- * @RateLimit(permits = 20, window = 10, unit = TimeUnit.SECONDS, strategy = KeyStrategy.COOKIE, strategyArg = "SESSIONID", key = "#request.getCookie('SESSIONID')")
+ * // Example 4: Limit to 20 requests per 10 seconds, using a cookie value
+ * @RateLimit(permits = 20, window = 10, unit = TimeUnit.SECONDS,
+ *           strategy = KeyStrategy.COOKIE,
+ *           strategyArg = "SESSIONID",
+ *           key = "#request.getCookie('SESSIONID')")
  * public void submitForm() { ... }
  *
- * // Apply rate limit to all methods in a class
+ * // Example 5: Apply rate limit to all methods in a class
  * @RateLimit(permits = 50, window = 1, unit = TimeUnit.HOURS)
  * public class MyController { ... }
- * </pre>
+ * }</pre>
  * <h2>Parameters</h2>
  * <ul>
  *   <li><b>permits</b>: Maximum number of allowed requests within the specified window.</li>
@@ -73,6 +79,8 @@ public @interface RateLimit {
      * <p>
      * For example, {@code permits = 100} allows up to 100 requests per window per key.
      * </p>
+     *
+     * @return the maximum number of permitted requests
      */
     long permits() default 60;
 
@@ -81,6 +89,8 @@ public @interface RateLimit {
      * <p>
      * Used together with {@link #unit()} to define the time window (e.g., 1 HOUR, 10 SECONDS).
      * </p>
+     *
+     * @return the duration of the rate limit window
      */
     long window() default 60;
 
@@ -89,6 +99,8 @@ public @interface RateLimit {
      * <p>
      * Common values: {@code TimeUnit.SECONDS}, {@code TimeUnit.MINUTES}, {@code TimeUnit.HOURS}, {@code TimeUnit.DAYS}.
      * </p>
+     *
+     * @return the time unit for the window duration
      */
     java.util.concurrent.TimeUnit unit() default TimeUnit.SECONDS;
 
@@ -98,6 +110,8 @@ public @interface RateLimit {
      * Examples: {@code "#userId"}, {@code "#request.getHeader('X-Api-Key')"}.
      * If empty, uses the default for the selected {@link #strategy()}.
      * </p>
+     *
+     * @return the SpEL expression for key extraction
      */
     String key() default "";
 
@@ -107,6 +121,8 @@ public @interface RateLimit {
      * Options: IP (default), COOKIE, HEADER, USER, CUSTOM.
      * Determines how requests are grouped for rate limiting.
      * </p>
+     *
+     * @return the strategy to use for key resolution
      */
     KeyStrategy strategy() default KeyStrategy.IP;
 
@@ -115,6 +131,8 @@ public @interface RateLimit {
      * <p>
      * Used with COOKIE (e.g., "SESSIONID"), HEADER (e.g., "X-Api-Key"), or USER (e.g., claim name).
      * </p>
+     *
+     * @return the argument for the selected strategy
      */
     String strategyArg() default "";
 
@@ -123,6 +141,8 @@ public @interface RateLimit {
      * <p>
      * If true, headers like {@code X-RateLimit-Remaining} and {@code Retry-After} are included.
      * </p>
+     *
+     * @return true if rate limit headers should be sent, false otherwise
      */
     boolean sendHeaders() default true;
 
@@ -131,6 +151,8 @@ public @interface RateLimit {
      * <p>
      * Default is 429 (Too Many Requests). Can be customized as needed.
      * </p>
+     *
+     * @return the HTTP status code to use when rate limit is exceeded
      */
     int httpStatus() default 429;
 }

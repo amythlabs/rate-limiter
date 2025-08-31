@@ -23,15 +23,33 @@ import java.util.Optional;
  * Lets core code work without depending on Servlet or WebFlux APIs.
  */
 public interface HttpRequestContext {
-    /** Returns the client IP (may include logic to handle proxies). */
+    /**
+     * Returns the client IP address, possibly taking into account proxy headers.
+     *
+     * @return the client's IP address as a string
+     */
     String clientIp();
 
-    /** Returns a cookie value by name, or empty if not present. */
+    /**
+     * Returns the value of the specified cookie.
+     *
+     * @param name the name of the cookie to retrieve
+     * @return an Optional containing the cookie value, or empty if not present
+     */
     Optional<String> cookie(String name);
 
-    /** Returns a header value by name, or empty if not present. */
+    /**
+     * Returns the value of the specified HTTP header.
+     *
+     * @param name the name of the header to retrieve
+     * @return an Optional containing the header value, or empty if not present
+     */
     Optional<String> header(String name);
 
-    /** Returns an authenticated user identifier, or empty if not present. */
+    /**
+     * Returns the authenticated user's identifier.
+     *
+     * @return an Optional containing the user ID, or empty if user is not authenticated
+     */
     Optional<String> userId();
 }

@@ -16,12 +16,34 @@
 
 package org.amyth.core.api;
 
+/**
+ * Storage interface for rate limiting counters.
+ * Abstracts the underlying storage mechanism (Redis, in-memory, etc.)
+ * and provides atomic operations for managing rate limit buckets.
+ */
 public interface RateLimitStore {
     /**
      * Atomically add a hit for a window bucket and return current count.
      * For sliding window you’ll manage multiple buckets (e.g., per-minute).
+     * @param bucketKey the unique identifier for the rate limit bucket
+     * @param ttlMillis time-to-live in milliseconds for the bucket
+     * @return the updated count value after incrementing
      */
     long incrementAndGet(String bucketKey, long ttlMillis);
+
+    /**
+     * Retrieves the current count for the given bucket.
+     *
+     * @param bucketKey the unique identifier for the rate limit bucket
+     * @return the current count value
+     */
     long get(String bucketKey);
+
+    /**
+     * Sets or updates the expiration time for a bucket.
+     *
+     * @param bucketKey the unique identifier for the rate limit bucket
+     * @param ttlMillis time-to-live in milliseconds for the bucket
+     */
     void expire(String bucketKey, long ttlMillis);
 }
